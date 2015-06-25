@@ -1,4 +1,5 @@
 # PhotoCrop
+[![Build Status](https://travis-ci.org/albinmathew/PhotoCrop.svg?branch=master)](https://travis-ci.org/albinmathew/PhotoCrop)
 
 ![alt text](https://raw.githubusercontent.com/albinmathew/PhotoCrop/master/screenshots/pic1.png)
 
