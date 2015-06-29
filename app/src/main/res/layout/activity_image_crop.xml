@@ -7,13 +7,13 @@
     android:background="@color/ultra_dark"
     tools:context=".MainActivity">
 
-    <com.albinmathew.samples.photocrop.imagecrop.photoview.PhotoView
+    <com.albinmathew.photocrop.photoview.PhotoView
         android:id="@+id/iv_photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="center" />
 
-    <com.albinmathew.samples.photocrop.imagecrop.cropoverlay.CropOverlayView
+    <com.albinmathew.photocrop.cropoverlay.CropOverlayView
         android:id="@+id/crop_overlay"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

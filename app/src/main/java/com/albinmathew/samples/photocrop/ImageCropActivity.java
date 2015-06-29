@@ -24,11 +24,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.albinmathew.samples.photocrop.imagecrop.cropoverlay.CropOverlayView;
-import com.albinmathew.samples.photocrop.imagecrop.cropoverlay.edge.Edge;
-import com.albinmathew.samples.photocrop.imagecrop.cropoverlay.utils.ImageViewUtil;
-import com.albinmathew.samples.photocrop.imagecrop.photoview.PhotoView;
-import com.albinmathew.samples.photocrop.imagecrop.photoview.PhotoViewAttacher;
+import com.albinmathew.photocrop.cropoverlay.CropOverlayView;
+import com.albinmathew.photocrop.cropoverlay.edge.Edge;
+import com.albinmathew.photocrop.cropoverlay.utils.ImageViewUtil;
+import com.albinmathew.photocrop.photoview.PhotoView;
+import com.albinmathew.photocrop.photoview.PhotoViewAttacher;
 
 import java.io.Closeable;
 import java.io.File;
