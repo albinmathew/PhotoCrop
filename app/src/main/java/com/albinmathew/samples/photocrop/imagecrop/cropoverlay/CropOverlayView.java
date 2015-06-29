@@ -1,16 +1,13 @@
 package com.albinmathew.samples.photocrop.imagecrop.cropoverlay;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 
 import com.albinmathew.samples.photocrop.R;
@@ -20,8 +17,10 @@ import com.albinmathew.samples.photocrop.imagecrop.photoview.PhotoViewAttacher;
 
 
 /**
- * @author GT
- *         Modified/stripped down Code from cropper library : https://github.com/edmodo/cropper
+ * @author albin
+ *@date 23/6/15
+ *
+ *  Modified/stripped down Code from cropper library : https://github.com/edmodo/cropper
  */
 public class CropOverlayView extends View implements PhotoViewAttacher.IGetImageBounds {
 
@@ -56,6 +55,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
     private int mMinWidth;
     private int mMaxWidth;
     private Context mContext;
+    private Path clipPath;
 
     public CropOverlayView(Context context) {
         super(context);
@@ -80,22 +80,14 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
         init(context);
     }
 
-    @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        final float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, CORNER_RADIUS, mContext.getResources().getDisplayMetrics());
-
-        RectF rectF = new RectF(Edge.LEFT.getCoordinate(),
-                Edge.TOP.getCoordinate(),
-                Edge.RIGHT.getCoordinate(),
-                Edge.BOTTOM.getCoordinate());
         float cx = (Edge.LEFT.getCoordinate() + Edge.RIGHT.getCoordinate()) / 2;
         float cy = (Edge.TOP.getCoordinate() + Edge.BOTTOM.getCoordinate()) / 2;
         float radius2 = (Edge.RIGHT.getCoordinate() - Edge.LEFT.getCoordinate()) / 2;
 
-        Path clipPath = new Path();
         clipPath.addCircle(cx, cy, radius2, Path.Direction.CW);
         canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
         canvas.drawARGB(204, 41, 48, 63);
@@ -104,6 +96,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
         //drawRuleOfThirdsGuidelines(canvas);
     }
 
+    @Override
     public Rect getImageBounds() {
         return new Rect((int) Edge.LEFT.getCoordinate(), (int) Edge.TOP.getCoordinate(), (int) Edge.RIGHT.getCoordinate(), (int) Edge.BOTTOM.getCoordinate());
     }
@@ -111,6 +104,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
 
     // Private Methods /////////////////////////////////////////////////////////
     private void init(Context context) {
+        clipPath = new Path();
         int w = context.getResources().getDisplayMetrics().widthPixels;
         cropWidth = w - 2 * mMarginSide;
         cropHeight = cropWidth;

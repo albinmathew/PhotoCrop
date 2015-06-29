@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class InternalStorageContentProvider extends ContentProvider {
     public static final Uri CONTENT_URI = Uri.parse("content://com.albinmathew.samples.photocrop/");
-    private static final HashMap<String, String> MIME_TYPES = new HashMap<String, String>();
+    private static final HashMap<String, String> MIME_TYPES = new HashMap<>();
 
     static {
         MIME_TYPES.put(".jpg", "image/jpeg");

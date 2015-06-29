@@ -5,7 +5,8 @@ import android.net.Uri;
 import java.io.File;
 
 /**
- * @author GT
+ * @author albin
+ * @date 24/6/15
  */
 public class Utils {
 

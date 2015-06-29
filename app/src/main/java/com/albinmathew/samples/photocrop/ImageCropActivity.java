@@ -227,7 +227,7 @@ public class ImageCropActivity extends Activity {
             } else if (resultCode == RESULT_CANCELED) {
                 userCancelled();
             } else {
-                errored("Error while opening the image file. Please try again.");
+                errored();
             }
 
         } else if (requestCode == REQUEST_CODE_PICK_GALLERY) {
@@ -246,10 +246,10 @@ public class ImageCropActivity extends Activity {
                     mImageUri = Utils.getImageUri(mImagePath);
                     init();
                 } catch (Exception e) {
-                    errored("Error while opening the image file. Please try again.");
+                    errored();
                 }
             } else {
-                errored("Error while opening the image file. Please try again.");
+                errored();
             }
 
         }
@@ -349,8 +349,7 @@ public class ImageCropActivity extends Activity {
         float actualCropHeight = cropWindowHeight * scaleFactorHeight;
 
         // Crop the subset from the original Bitmap.
-        Bitmap croppedBitmap = Bitmap.createBitmap(mCurrentDisplayedBitmap, (int) actualCropX, (int) actualCropY, (int) actualCropWidth, (int) actualCropHeight);
-        return croppedBitmap;
+        return Bitmap.createBitmap(mCurrentDisplayedBitmap, (int) actualCropX, (int) actualCropY, (int) actualCropWidth, (int) actualCropHeight);
     }
 
     @Override
@@ -418,11 +417,11 @@ public class ImageCropActivity extends Activity {
         finish();
     }
 
-    public void errored(String msg) {
+    public void errored() {
         Intent intent = new Intent();
         intent.putExtra(ERROR, true);
-        if (msg != null) {
-            intent.putExtra(ERROR_MSG, msg);
+        if ("Error while opening the image file. Please try again." != null) {
+            intent.putExtra(ERROR_MSG, "Error while opening the image file. Please try again.");
         }
         finish();
     }
