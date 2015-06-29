@@ -29,6 +29,7 @@ public class PaintUtil {
     private static final int DEFAULT_CORNER_COLOR = Color.WHITE;
     private static final String PINK_COLOR = "#FFC0CB";
     private static final String SEMI_TRANSPARENT = "#AAFFFFFF";
+    private static final String DEFAULT_BOARDER_COLOR = "#FFFFFFFF";
     private static final String DEFAULT_BACKGROUND_COLOR_ID = "#B029303F";
     private static final float DEFAULT_LINE_THICKNESS_DP = 1;
     private static final float DEFAULT_CORNER_THICKNESS_DP = 5;
@@ -48,7 +49,7 @@ public class PaintUtil {
 
         final Paint borderPaint = new Paint();
         borderPaint.setAntiAlias(true);
-        borderPaint.setColor(Color.parseColor(PINK_COLOR));
+        borderPaint.setColor(Color.parseColor(DEFAULT_BOARDER_COLOR));
         borderPaint.setStrokeWidth(lineThicknessPx);
         borderPaint.setStyle(Paint.Style.STROKE);
 

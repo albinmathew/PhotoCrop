@@ -22,8 +22,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 import com.albinmathew.photocrop.R;
@@ -40,12 +42,11 @@ import com.albinmathew.photocrop.photoview.PhotoViewAttacher;
 public class CropOverlayView extends View implements PhotoViewAttacher.IGetImageBounds {
 
     private static final float CORNER_RADIUS = 6;
-    //Defaults
-    private boolean DEFAULT_GUIDELINES = true;
+    private boolean DEFAULT_GUIDELINES = false;
+    private boolean DEFAULT_DRAW_CIRCLE = false;
     private int DEFAULT_MARGINTOP = 100;
     private int DEFAULT_MARGINSIDE = 50;
-    private int DEFAULT_MIN_WIDTH = 500;
-    private int DEFAULT_MAX_WIDTH = 700;
+    private int DEFAULT_BOARDER_COLOR = 0xFFFFFFFF;
     // we are croping square image so width and height will always be equal
     private int DEFAULT_CROPWIDTH = 600;
     // The Paint used to darken the surrounding areas outside the crop area.
@@ -65,12 +66,13 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
 
 
     private boolean mGuidelines;
+    private boolean mDrawCircle;
     private int mMarginTop;
     private int mMarginSide;
-    private int mMinWidth;
-    private int mMaxWidth;
+    private int mBorderPaintColor;
     private Context mContext;
     private Path clipPath;
+    private RectF rectF;
 
     public CropOverlayView(Context context) {
         super(context);
@@ -84,10 +86,10 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CropOverlayView, 0, 0);
         try {
             mGuidelines = ta.getBoolean(R.styleable.CropOverlayView_guideLines, DEFAULT_GUIDELINES);
+            mDrawCircle = ta.getBoolean(R.styleable.CropOverlayView_drawCircle, DEFAULT_DRAW_CIRCLE);
             mMarginTop = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginTop, DEFAULT_MARGINTOP);
             mMarginSide = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginSide, DEFAULT_MARGINSIDE);
-            mMinWidth = ta.getDimensionPixelSize(R.styleable.CropOverlayView_minWidth, DEFAULT_MIN_WIDTH);
-            mMaxWidth = ta.getDimensionPixelSize(R.styleable.CropOverlayView_maxWidth, DEFAULT_MAX_WIDTH);
+            mBorderPaintColor = ta.getColor(R.styleable.CropOverlayView_borderColor, DEFAULT_BOARDER_COLOR);
         } finally {
             ta.recycle();
         }
@@ -99,16 +101,26 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        float cx = (Edge.LEFT.getCoordinate() + Edge.RIGHT.getCoordinate()) / 2;
-        float cy = (Edge.TOP.getCoordinate() + Edge.BOTTOM.getCoordinate()) / 2;
-        float radius2 = (Edge.RIGHT.getCoordinate() - Edge.LEFT.getCoordinate()) / 2;
-
-        clipPath.addCircle(cx, cy, radius2, Path.Direction.CW);
-        canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
-        canvas.drawARGB(204, 41, 48, 63);
-        canvas.restore();
-        canvas.drawCircle(cx, cy, radius2, mBorderPaint);
-        //drawRuleOfThirdsGuidelines(canvas);
+        if(mDrawCircle) {
+            float cx = (Edge.LEFT.getCoordinate() + Edge.RIGHT.getCoordinate()) / 2;
+            float cy = (Edge.TOP.getCoordinate() + Edge.BOTTOM.getCoordinate()) / 2;
+            float radius2 = (Edge.RIGHT.getCoordinate() - Edge.LEFT.getCoordinate()) / 2;
+            clipPath.addCircle(cx, cy, radius2, Path.Direction.CW);
+            canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
+            canvas.drawARGB(204, 41, 48, 63);
+            canvas.restore();
+            canvas.drawCircle(cx, cy, radius2, mBorderPaint);
+        }else {
+            final float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, CORNER_RADIUS, mContext.getResources().getDisplayMetrics());
+            clipPath.addRoundRect(rectF, radius, radius, Path.Direction.CW);
+            canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
+            canvas.drawARGB(204, 41, 48, 63);
+            canvas.restore();
+            canvas.drawRoundRect(rectF, radius, radius, mBorderPaint);
+        }
+        if(mGuidelines) {
+            drawRuleOfThirdsGuidelines(canvas);
+        }
     }
 
     @Override
@@ -116,8 +128,6 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
         return new Rect((int) Edge.LEFT.getCoordinate(), (int) Edge.TOP.getCoordinate(), (int) Edge.RIGHT.getCoordinate(), (int) Edge.BOTTOM.getCoordinate());
     }
 
-
-    // Private Methods /////////////////////////////////////////////////////////
     private void init(Context context) {
         clipPath = new Path();
         int w = context.getResources().getDisplayMetrics().widthPixels;
@@ -129,6 +139,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
         int edgeR = mMarginSide + cropWidth;
         mBackgroundPaint = PaintUtil.newBackgroundPaint(context);
         mBorderPaint = PaintUtil.newBorderPaint(context);
+        mBorderPaint.setColor(mBorderPaintColor);
         mGuidelinePaint = PaintUtil.newGuidelinePaint();
         Edge.TOP.setCoordinate(edgeT);
         Edge.BOTTOM.setCoordinate(edgeB);
@@ -136,6 +147,10 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
         Edge.RIGHT.setCoordinate(edgeR);
         new Rect(edgeL, edgeT, edgeR, edgeB);
         mBitmapRect = new Rect(0, 0, w, w);
+        rectF = new RectF(Edge.LEFT.getCoordinate(),
+                Edge.TOP.getCoordinate(),
+                Edge.RIGHT.getCoordinate(),
+                Edge.BOTTOM.getCoordinate());
     }
 
 

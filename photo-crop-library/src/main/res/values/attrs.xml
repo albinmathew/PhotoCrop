@@ -3,10 +3,12 @@
     <!-- Crop overlay view -->
     <declare-styleable name="CropOverlayView">
         <attr name="guideLines" format="boolean"/>
+        <attr name="drawCircle" format="boolean"/>
         <attr name="marginTop" format="dimension"/>
         <attr name="marginSide" format="dimension"/>
         <attr name="minWidth" format="dimension"/>
         <attr name="maxWidth" format="dimension"/>
+        <attr name="borderColor" format="color"/>
     </declare-styleable>
 
 </resources>
