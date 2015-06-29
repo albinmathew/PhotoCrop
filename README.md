@@ -1,5 +1,5 @@
 # PhotoCrop
-[![Build Status](https://travis-ci.org/albinmathew/PhotoCrop.svg?branch=master)](https://travis-ci.org/albinmathew/PhotoCrop)
+[![Build Status](https://travis-ci.org/albinmathew/PhotoCrop.svg?branch=master)](https://travis-ci.org/albinmathew/PhotoCrop)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PhotoCrop-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2046) 
 
 ![alt text](https://raw.githubusercontent.com/albinmathew/PhotoCrop/master/screenshots/pic1.png)
 
