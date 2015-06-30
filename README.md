@@ -1,5 +1,5 @@
 # PhotoCrop
-[![Build Status](https://travis-ci.org/albinmathew/PhotoCrop.svg?branch=master)](https://travis-ci.org/albinmathew/PhotoCrop)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PhotoCrop-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2046) 
+[![Build Status](https://travis-ci.org/albinmathew/PhotoCrop.svg?branch=master)](https://travis-ci.org/albinmathew/PhotoCrop)  [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-PhotoCrop-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2046)  [ ![Download](https://api.bintray.com/packages/albinmathew/maven/PhotoCrop/images/download.svg) ](https://bintray.com/albinmathew/maven/PhotoCrop/_latestVersion)
 
 ![alt text](https://raw.githubusercontent.com/albinmathew/PhotoCrop/master/screenshots/pic1.png)
 
@@ -9,7 +9,15 @@ crop window on top of the image.Calling the method getCroppedImage() will then r
 It gives the feature of cropping an image where image can resize,zoom whereas cropper window remains static similar to facebook
 Users can get both circularly cropped and rectangular cropped images.Cropping window also takes circular and rectangular shapes.
 
-## Features
+#Usage
+
+In your app build.gradle add
+
+```
+	compile 'com.albinmathew:photo-crop-library:1.0.1'
+```
+
+# Features
 - Out of the box zooming, using multi-touch and double-tap.
 - Scrolling, with smooth scrolling fling.
 - Works perfectly when using used in a scrolling parent (such as ViewPager).

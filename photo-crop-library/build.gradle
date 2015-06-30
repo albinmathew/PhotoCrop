@@ -38,7 +38,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
 }
 group = 'com.albinmathew'
-version = '1.0.0'
+version = '1.0.1'
 
 
 apply plugin: 'maven'
