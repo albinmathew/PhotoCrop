@@ -14,7 +14,29 @@ Users can get both circularly cropped and rectangular cropped images.Cropping wi
 In your app build.gradle add
 
 ```
-	compile 'com.albinmathew:photo-crop-library:1.0.1'
+	compile 'com.albinmathew:photo-crop-library:1.0.2'
+```
+
+
+```
+    <com.albinmathew.photocrop.photoview.PhotoView
+        android:id="@+id/iv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center" />
+```
+
+
+```
+    <com.albinmathew.photocrop.cropoverlay.CropOverlayView
+        android:id="@+id/crop_overlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:guideLines="false"
+        app:drawCircle="true"
+        app:borderColor="#FF56FF1F"
+        app:marginSide="20dp"
+        app:marginTop="50dp" />
 ```
 
 # Features
