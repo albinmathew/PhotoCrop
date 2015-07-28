@@ -53,6 +53,10 @@ The library is made by combining two libraries
 
 1. https://github.com/chrisbanes/PhotoView
 2. https://github.com/edmodo/cropper
+ 
+# Contribute
+
+[![Download](https://www.paypalobjects.com/en_GB/i/btn/btn_paynowCC_LG.gif) ](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3HFPQ6XVBKPJN)
 
 ## License
 
