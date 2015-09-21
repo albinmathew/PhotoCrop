@@ -3,6 +3,7 @@ package com.albinmathew.samples.photocrop;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -276,33 +277,7 @@ public class ImageCropActivity extends Activity {
             in = mContentResolver.openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(in, null, o2);
             in.close();
-
-            //First check
-            ExifInterface ei = new ExifInterface(uri.getPath());
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    returnedBitmap = rotateImage(bitmap, 90);
-                    //Free up the memory
-                    bitmap.recycle();
-                    bitmap = null;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    returnedBitmap = rotateImage(bitmap, 180);
-                    //Free up the memory
-                    bitmap.recycle();
-                    bitmap = null;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    returnedBitmap = rotateImage(bitmap, 270);
-                    //Free up the memory
-                    bitmap.recycle();
-                    bitmap = null;
-                    break;
-                default:
-                    returnedBitmap = bitmap;
-            }
+            returnedBitmap = fixOrientationBugOfProcessedBitmap(bitmap);
             return returnedBitmap;
         } catch (FileNotFoundException e) {
             Log.d(TAG, "FileNotFoundException");
@@ -310,6 +285,48 @@ public class ImageCropActivity extends Activity {
             Log.d(TAG, "IOException");
         }
         return null;
+    }
+
+    public static int getCameraPhotoOrientation(@NonNull Context context, Uri imageUri) {
+        int rotate = 0;
+        try {
+            context.getContentResolver().notifyChange(imageUri, null);
+            ExifInterface exif = new ExifInterface(
+                    imageUri.getPath());
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rotate;
+    }
+
+    private Bitmap fixOrientationBugOfProcessedBitmap(Bitmap bitmap) {
+        try {
+            if (getCameraPhotoOrientation(this, Uri.parse(mFileTemp.getPath())) == 0) {
+                return bitmap;
+            } else {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(getCameraPhotoOrientation(this, Uri.parse(mFileTemp.getPath())));
+                // recreate the new Bitmap and set it back
+                return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     private Bitmap getCurrentDisplayedImage() {
@@ -402,14 +419,6 @@ public class ImageCropActivity extends Activity {
             // do nothing
         }
     }
-
-
-    private Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
 
     public void userCancelled() {
         Intent intent = new Intent();
