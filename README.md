@@ -54,7 +54,7 @@ The library is made by combining two libraries
 1. https://github.com/chrisbanes/PhotoView
 2. https://github.com/edmodo/cropper
 
-## License
+# License
 
     Copyright 2015 Albin Mathew
 
