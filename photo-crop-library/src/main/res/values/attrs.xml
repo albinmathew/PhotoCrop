@@ -9,6 +9,7 @@
         <attr name="minWidth" format="dimension"/>
         <attr name="maxWidth" format="dimension"/>
         <attr name="borderColor" format="color"/>
+        <attr name="overlayColor" format="color"/>
     </declare-styleable>
 
 </resources>

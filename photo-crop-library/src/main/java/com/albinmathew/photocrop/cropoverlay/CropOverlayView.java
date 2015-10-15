@@ -24,6 +24,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -47,6 +48,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
     private int DEFAULT_MARGINTOP = 100;
     private int DEFAULT_MARGINSIDE = 50;
     private int DEFAULT_BOARDER_COLOR = 0xFFFFFFFF;
+    private int DEFAULT_BACKGROUND_COLOR = 0xB029303F;
     // we are croping square image so width and height will always be equal
     private int DEFAULT_CROPWIDTH = 600;
     // The Paint used to darken the surrounding areas outside the crop area.
@@ -70,6 +72,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
     private int mMarginTop;
     private int mMarginSide;
     private int mBorderPaintColor;
+    private int mBackgroundColor;
     private Context mContext;
     private Path clipPath;
     private RectF rectF;
@@ -90,6 +93,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
             mMarginTop = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginTop, DEFAULT_MARGINTOP);
             mMarginSide = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginSide, DEFAULT_MARGINSIDE);
             mBorderPaintColor = ta.getColor(R.styleable.CropOverlayView_borderColor, DEFAULT_BOARDER_COLOR);
+            mBackgroundColor = ta.getColor(R.styleable.CropOverlayView_overlayColor, DEFAULT_BACKGROUND_COLOR);
         } finally {
             ta.recycle();
         }
@@ -107,15 +111,21 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
             float radius2 = (Edge.RIGHT.getCoordinate() - Edge.LEFT.getCoordinate()) / 2;
             clipPath.addCircle(cx, cy, radius2, Path.Direction.CW);
             canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
-            canvas.drawARGB(204, 41, 48, 63);
-            canvas.restore();
+            canvas.drawColor(mBackgroundColor);
+            if(Build.VERSION.SDK_INT>=23){
+            }else{
+                canvas.restore();
+            }
             canvas.drawCircle(cx, cy, radius2, mBorderPaint);
         }else {
             final float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, CORNER_RADIUS, mContext.getResources().getDisplayMetrics());
             clipPath.addRoundRect(rectF, radius, radius, Path.Direction.CW);
             canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
-            canvas.drawARGB(204, 41, 48, 63);
-            canvas.restore();
+            canvas.drawColor(mBackgroundColor);
+            if(Build.VERSION.SDK_INT>=23){
+            }else{
+                canvas.restore();
+            }
             canvas.drawRoundRect(rectF, radius, radius, mBorderPaint);
         }
         if(mGuidelines) {
@@ -138,6 +148,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
         int edgeL = mMarginSide;
         int edgeR = mMarginSide + cropWidth;
         mBackgroundPaint = PaintUtil.newBackgroundPaint(context);
+        mBackgroundPaint.setColor(mBackgroundColor);
         mBorderPaint = PaintUtil.newBorderPaint(context);
         mBorderPaint.setColor(mBorderPaintColor);
         mGuidelinePaint = PaintUtil.newGuidelinePaint();

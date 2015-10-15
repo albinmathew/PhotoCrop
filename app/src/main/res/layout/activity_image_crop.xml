@@ -20,6 +20,7 @@
         app:guideLines="false"
         app:drawCircle="true"
         app:borderColor="#FF56FF1F"
+        app:overlayColor="#575453"
         app:marginSide="20dp"
         app:marginTop="50dp" />
 
