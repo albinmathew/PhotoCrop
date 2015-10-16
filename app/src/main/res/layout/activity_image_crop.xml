@@ -19,6 +19,7 @@
         android:layout_height="fill_parent"
         app:guideLines="false"
         app:drawCircle="true"
+        app:cornerRadius="20dp"
         app:borderColor="#FF56FF1F"
         app:overlayColor="#575453"
         app:marginSide="20dp"

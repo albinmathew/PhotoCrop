@@ -8,6 +8,7 @@
         <attr name="marginSide" format="dimension"/>
         <attr name="minWidth" format="dimension"/>
         <attr name="maxWidth" format="dimension"/>
+        <attr name="cornerRadius" format="dimension"/>
         <attr name="borderColor" format="color"/>
         <attr name="overlayColor" format="color"/>
     </declare-styleable>

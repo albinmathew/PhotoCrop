@@ -42,7 +42,7 @@ import com.albinmathew.photocrop.photoview.PhotoViewAttacher;
  */
 public class CropOverlayView extends View implements PhotoViewAttacher.IGetImageBounds {
 
-    private static final float CORNER_RADIUS = 6;
+    private float DEFAULT_CORNER_RADIUS = 6;
     private boolean DEFAULT_GUIDELINES = false;
     private boolean DEFAULT_DRAW_CIRCLE = false;
     private int DEFAULT_MARGINTOP = 100;
@@ -76,6 +76,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
     private Context mContext;
     private Path clipPath;
     private RectF rectF;
+    private float mCornerRadius;
 
     public CropOverlayView(Context context) {
         super(context);
@@ -94,6 +95,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
             mMarginSide = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginSide, DEFAULT_MARGINSIDE);
             mBorderPaintColor = ta.getColor(R.styleable.CropOverlayView_borderColor, DEFAULT_BOARDER_COLOR);
             mBackgroundColor = ta.getColor(R.styleable.CropOverlayView_overlayColor, DEFAULT_BACKGROUND_COLOR);
+            mCornerRadius = ta.getDimension(R.styleable.CropOverlayView_cornerRadius, DEFAULT_CORNER_RADIUS);
         } finally {
             ta.recycle();
         }
@@ -118,7 +120,7 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
             }
             canvas.drawCircle(cx, cy, radius2, mBorderPaint);
         }else {
-            final float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, CORNER_RADIUS, mContext.getResources().getDisplayMetrics());
+            final float radius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mCornerRadius, mContext.getResources().getDisplayMetrics());
             clipPath.addRoundRect(rectF, radius, radius, Path.Direction.CW);
             canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
             canvas.drawColor(mBackgroundColor);
