@@ -1,10 +1,10 @@
 package com.albinmathew.samples.photocrop;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +16,7 @@ import android.widget.Toast;
  * @author albin
  * @date 23/6/15
  */
-public class ImageViewActivity extends Activity implements PicModeSelectDialogFragment.IPicModeSelectListener {
+public class ImageViewActivity extends AppCompatActivity implements PicModeSelectDialogFragment.IPicModeSelectListener {
 
     public static final String TAG = "ImageViewActivity";
     public static final String TEMP_PHOTO_FILE_NAME = "temp_photo.jpg";

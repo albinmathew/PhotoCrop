@@ -1,10 +1,11 @@
 package com.albinmathew.samples.photocrop;
 
-import android.app.Activity;
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -14,10 +15,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,12 +45,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
-
 /**
  * @author albin
  * @date 23/6/15
  */
-public class ImageCropActivity extends Activity {
+public class ImageCropActivity extends AppCompatActivity {
 
     public static final String TAG = "ImageCropActivity";
     public static final String TEMP_PHOTO_FILE_NAME = "temp_photo.jpg";
@@ -54,6 +58,7 @@ public class ImageCropActivity extends Activity {
     public static final int REQUEST_CODE_CROPPED_PICTURE = 0x3;
     public static final String ERROR_MSG = "error_msg";
     public static final String ERROR = "error";
+    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 218;
     private final int IMAGE_MAX_SIZE = 1024;
     private final Bitmap.CompressFormat mOutputFormat = Bitmap.CompressFormat.JPEG;
     private PhotoView mImageView;
@@ -89,6 +94,32 @@ public class ImageCropActivity extends Activity {
         }
     }
 
+    public static int getCameraPhotoOrientation(@NonNull Context context, Uri imageUri) {
+        int rotate = 0;
+        try {
+            context.getContentResolver().notifyChange(imageUri, null);
+            ExifInterface exif = new ExifInterface(
+                    imageUri.getPath());
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rotate;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +138,22 @@ public class ImageCropActivity extends Activity {
                 return new Rect((int) Edge.LEFT.getCoordinate(), (int) Edge.TOP.getCoordinate(), (int) Edge.RIGHT.getCoordinate(), (int) Edge.BOTTOM.getCoordinate());
             }
         });
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+            }else{
+                proceedToCrop(savedInstanceState);
+            }
+        } else {
+            proceedToCrop(savedInstanceState);
+        }
+    }
 
+    private void proceedToCrop(Bundle savedInstanceState) {
         createTempFile();
         if (savedInstanceState == null || !savedInstanceState.getBoolean("restoreState")) {
             String action = getIntent().getStringExtra("ACTION");
@@ -166,6 +212,22 @@ public class ImageCropActivity extends Activity {
             finish();
         } else {
             Toast.makeText(this, "Unable to save Image into your device.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    proceedToCrop(null);
+                } else {
+                    Toast.makeText(this, "No permission granted to access the external storage", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 
@@ -256,7 +318,6 @@ public class ImageCropActivity extends Activity {
         }
     }
 
-
     private Bitmap getBitmap(Uri uri) {
         InputStream in = null;
         Bitmap returnedBitmap = null;
@@ -285,32 +346,6 @@ public class ImageCropActivity extends Activity {
             Log.d(TAG, "IOException");
         }
         return null;
-    }
-
-    public static int getCameraPhotoOrientation(@NonNull Context context, Uri imageUri) {
-        int rotate = 0;
-        try {
-            context.getContentResolver().notifyChange(imageUri, null);
-            ExifInterface exif = new ExifInterface(
-                    imageUri.getPath());
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotate = 270;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotate = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotate = 90;
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return rotate;
     }
 
     private Bitmap fixOrientationBugOfProcessedBitmap(Bitmap bitmap) {

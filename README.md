@@ -14,7 +14,7 @@ Users can get both circularly cropped and rectangular cropped images.Cropping wi
 In your app build.gradle add
 
 ```
-	compile 'com.albinmathew:photo-crop-library:1.0.2'
+	compile 'com.albinmathew:photo-crop-library:1.0.3'
 ```
 
 
@@ -34,7 +34,9 @@ In your app build.gradle add
         android:layout_height="fill_parent"
         app:guideLines="false"
         app:drawCircle="true"
+        app:cornerRadius="10dp"
         app:borderColor="#FF56FF1F"
+        app:overlayColor="#575453"
         app:marginSide="20dp"
         app:marginTop="50dp" />
 ```
