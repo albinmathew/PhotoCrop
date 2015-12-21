@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Photocrop by albinmathew</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Photocrop</h1>
+      <h2 class="project-tagline">A Library which can be used to crop images in Android similar to Facebook and Telegram </h2>
+      <a href="https://github.com/albinmathew/PhotoCrop" class="btn">View on GitHub</a>
+      <a href="https://github.com/albinmathew/PhotoCrop/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/albinmathew/PhotoCrop/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="photocrop" class="anchor" href="#photocrop" aria-hidden="true"><span class="octicon octicon-link"></span></a>PhotoCrop</h1>
+
+<p><a href="https://travis-ci.org/albinmathew/PhotoCrop"><img src="https://travis-ci.org/albinmathew/PhotoCrop.svg?branch=master" alt="Build Status"></a>  <a href="http://android-arsenal.com/details/1/2046"><img src="https://img.shields.io/badge/Android%20Arsenal-PhotoCrop-brightgreen.svg?style=flat" alt="Android Arsenal"></a>  <a href="https://bintray.com/albinmathew/maven/PhotoCrop/_latestVersion"> <img src="https://api.bintray.com/packages/albinmathew/maven/PhotoCrop/images/download.svg" alt="Download"> </a></p>
+
+<p><img src="https://raw.githubusercontent.com/albinmathew/PhotoCrop/master/screenshots/pic1.png" alt="alt text"></p>
+
+<p>The PhotoCrop is an image cropping tool. It provides a way to set an image in XML and programmatically, and displays a resizable
+crop window on top of the image.Calling the method getCroppedImage() will then return the Bitmap marked by the crop window.</p>
+
+<p>It gives the feature of cropping an image where image can resize,zoom whereas cropper window remains static similar to facebook
+Users can get both circularly cropped and rectangular cropped images.Cropping window also takes circular and rectangular shapes.</p>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<p>In your app build.gradle add</p>
+
+<pre><code>    compile 'com.albinmathew:photo-crop-library:1.0.3'
+</code></pre>
+
+<pre><code>    &lt;com.albinmathew.photocrop.photoview.PhotoView
+        android:id="@+id/iv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center" /&gt;
+</code></pre>
+
+<pre><code>    &lt;com.albinmathew.photocrop.cropoverlay.CropOverlayView
+        android:id="@+id/crop_overlay"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:guideLines="false"
+        app:drawCircle="true"
+        app:cornerRadius="10dp"
+        app:borderColor="#FF56FF1F"
+        app:overlayColor="#575453"
+        app:marginSide="20dp"
+        app:marginTop="50dp" /&gt;
+</code></pre>
+
+<h1>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h1>
+
+<ul>
+<li>Out of the box zooming, using multi-touch and double-tap.</li>
+<li>Scrolling, with smooth scrolling fling.</li>
+<li>Works perfectly when using used in a scrolling parent (such as ViewPager).</li>
+<li>Allows the application to be notified when the displayed Matrix has changed. Useful for when you need to update your UI based on the current zoom/scroll position.</li>
+<li>Allows the application to be notified when the user taps on the Photo.</li>
+</ul>
+
+<h1>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h1>
+
+<p>The library is made by combining two libraries</p>
+
+<ol>
+<li><a href="https://github.com/chrisbanes/PhotoView">https://github.com/chrisbanes/PhotoView</a></li>
+<li><a href="https://github.com/edmodo/cropper">https://github.com/edmodo/cropper</a></li>
+</ol>
+
+<h1>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h1>
+
+<pre><code>Copyright 2015 Albin Mathew
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/albinmathew/PhotoCrop">Photocrop</a> is maintained by <a href="https://github.com/albinmathew">albinmathew</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
