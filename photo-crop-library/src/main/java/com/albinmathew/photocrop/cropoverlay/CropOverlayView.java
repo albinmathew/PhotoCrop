@@ -106,7 +106,6 @@ public class CropOverlayView extends View implements PhotoViewAttacher.IGetImage
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         if(mDrawCircle) {
             float cx = (Edge.LEFT.getCoordinate() + Edge.RIGHT.getCoordinate()) / 2;
             float cy = (Edge.TOP.getCoordinate() + Edge.BOTTOM.getCoordinate()) / 2;
