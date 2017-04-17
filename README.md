@@ -9,7 +9,7 @@ crop window on top of the image.Calling the method getCroppedImage() will then r
 It gives the feature of cropping an image where image can resize,zoom whereas cropper window remains static similar to facebook
 Users can get both circularly cropped and rectangular cropped images.Cropping window also takes circular and rectangular shapes.
 
-#Usage
+# Usage
 
 In your app build.gradle add
 
