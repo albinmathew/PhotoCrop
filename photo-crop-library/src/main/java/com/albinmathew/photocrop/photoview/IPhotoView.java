@@ -38,6 +38,13 @@ public interface IPhotoView {
     boolean canZoom();
 
     /**
+     * Returns true if the PhotoView is set to allow rotating of Photos.
+     *
+     * @return true if the PhotoView allows rotating.
+     */
+    boolean canRotate();
+
+    /**
      * Gets the Display Rectangle of the currently displayed Drawable. The Rectangle is relative to
      * this View and includes all scaling and translations.
      *
@@ -288,6 +295,14 @@ public interface IPhotoView {
      * @param zoomable - Whether the zoom functionality is enabled.
      */
     void setZoomable(boolean zoomable);
+
+    /**
+     * Allows you to enable/disable the rotate functionality on the ImageView. When disable the
+     * ImageView reverts to using the FIT_CENTER matrix.
+     *
+     * @param rotatable - Whether the rotate functionality is enabled.
+     */
+    void setRotatable(boolean rotatable);
 
     /**
      * Enables rotation via PhotoView internal functions. Name is chosen so it won't collide with

@@ -23,6 +23,8 @@ public interface GestureDetector {
 
     boolean isScaling();
 
+    boolean isRotating();
+
     void setOnGestureListener(OnGestureListener listener);
 
 }
