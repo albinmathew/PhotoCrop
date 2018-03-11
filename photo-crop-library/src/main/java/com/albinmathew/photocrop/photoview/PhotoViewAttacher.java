@@ -82,6 +82,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     private FlingRunnable mCurrentFlingRunnable;
     private int mScrollEdge = EDGE_BOTH;
     private boolean mZoomEnabled;
+    private boolean mRotateEnabled;
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
     public PhotoViewAttacher(ImageView imageView) {
         mImageView = new WeakReference<>(imageView);
@@ -118,6 +119,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 
         // Finally, update the UI so that we're zoomable
         setZoomable(true);
+        setRotatable(true);
     }
 
     private static void checkZoomLevels(float minZoom, float midZoom, float maxZoom) {
@@ -183,6 +185,11 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     @Override
     public boolean canZoom() {
         return mZoomEnabled;
+    }
+
+    @Override
+    public boolean canRotate() {
+        return mRotateEnabled;
     }
 
     /**
@@ -383,7 +390,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 
     @Override
     public void onDrag(float dx, float dy) {
-        if (mScaleDragDetector.isScaling()) {
+        if (mScaleDragDetector.isScaling() || mScaleDragDetector.isRotating()) {
             return; // Do not drag if we are already scaling
         }
 
@@ -405,7 +412,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
          * the edge, aka 'overscrolling', let the parent take over).
          */
         ViewParent parent = imageView.getParent();
-        if (mAllowParentInterceptOnEdge && !mScaleDragDetector.isScaling()) {
+        if (mAllowParentInterceptOnEdge && !mScaleDragDetector.isScaling() && !mScaleDragDetector.isRotating()) {
             if (mScrollEdge == EDGE_BOTH
                     || (mScrollEdge == EDGE_LEFT && dx >= 1f)
                     || (mScrollEdge == EDGE_RIGHT && dx <= -1f)) {
@@ -478,6 +485,18 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     }
 
     @Override
+    public void onRotate(float rotationDelta, float focusX, float focusY) {
+        if (DEBUG) {
+            Log.d(LOG_TAG, String.format("onRotate: angle: %.2f. fX: %.2f. fY: %.2f", rotationDelta, focusX, focusY));
+        }
+
+        if(mRotateEnabled) {
+            mSuppMatrix.postRotate(rotationDelta % 360, focusX, focusY);
+            checkAndDisplayMatrix();
+        }
+    }
+
+    @Override
     public boolean onTouch(View v, MotionEvent ev) {
         boolean handled = false;
 
@@ -512,7 +531,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
                     break;
             }
 
-            // Try the Scale/Drag detector
+            // Try the Scale/Drag/Rotate detector
             if (null != mScaleDragDetector && mScaleDragDetector.onTouchEvent(ev)) {
                 handled = true;
             }
@@ -597,6 +616,12 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     @Override
     public void setZoomable(boolean zoomable) {
         mZoomEnabled = zoomable;
+        update();
+    }
+
+    @Override
+    public void setRotatable(boolean rotatable) {
+        mRotateEnabled = rotatable;
         update();
     }
 

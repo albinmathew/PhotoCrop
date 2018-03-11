@@ -57,6 +57,11 @@ public class CupcakeGestureDetector implements GestureDetector {
     }
 
     @Override
+    public boolean isRotating() {
+        return false;
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent ev) {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN: {

@@ -75,6 +75,11 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
+    public boolean canRotate() {
+        return mAttacher.canRotate();
+    }
+
+    @Override
     public RectF getDisplayRect() {
         return mAttacher.getDisplayRect();
     }
@@ -252,6 +257,11 @@ public class PhotoView extends ImageView implements IPhotoView {
     @Override
     public void setZoomable(boolean zoomable) {
         mAttacher.setZoomable(zoomable);
+    }
+
+    @Override
+    public void setRotatable(boolean rotatable) {
+        mAttacher.setRotatable(rotatable);
     }
 
     @Override

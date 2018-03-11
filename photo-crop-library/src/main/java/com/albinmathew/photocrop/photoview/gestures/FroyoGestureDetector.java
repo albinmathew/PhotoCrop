@@ -25,33 +25,56 @@ public class FroyoGestureDetector extends EclairGestureDetector {
 
     protected final ScaleGestureDetector mDetector;
 
+    protected final RotationGestureDetector mRotationDetector;
+
     public FroyoGestureDetector(Context context) {
         super(context);
-        ScaleGestureDetector.OnScaleGestureListener mScaleListener = new ScaleGestureDetector.OnScaleGestureListener() {
+        ScaleGestureDetector.OnScaleGestureListener mScaleListener =
+            new ScaleGestureDetector.OnScaleGestureListener() {
 
-            @Override
-            public boolean onScale(ScaleGestureDetector detector) {
-                float scaleFactor = detector.getScaleFactor();
+                @Override
+                public boolean onScale(ScaleGestureDetector detector) {
+                    float scaleFactor = detector.getScaleFactor();
 
-                if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor))
-                    return false;
+                    if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor)) {
+                        return false;
+                    }
 
-                mListener.onScale(scaleFactor,
-                        detector.getFocusX(), detector.getFocusY());
-                return true;
-            }
+                    mListener.onScale(scaleFactor, detector.getFocusX(), detector.getFocusY());
+                    return true;
+                }
 
-            @Override
-            public boolean onScaleBegin(ScaleGestureDetector detector) {
-                return true;
-            }
+                @Override
+                public boolean onScaleBegin(ScaleGestureDetector detector) {
+                    return true;
+                }
 
-            @Override
-            public void onScaleEnd(ScaleGestureDetector detector) {
-                // NO-OP
-            }
-        };
+                @Override
+                public void onScaleEnd(ScaleGestureDetector detector) {
+                    // NO-OP
+                }
+            };
+
+        RotationGestureDetector.OnRotationGestureListener mRotateListener =
+            new RotationGestureDetector.OnRotationGestureListener() {
+                @Override
+                public boolean onRotate(RotationGestureDetector detector) {
+                    mListener.onRotate(detector.getRotationDelta(), detector.getFocusX(), detector.getFocusY());
+                    return true;
+                }
+
+                @Override
+                public boolean onRotationBegin(RotationGestureDetector detector) {
+                    return true;
+                }
+
+                @Override
+                public void onRotationEnd(RotationGestureDetector detector) {
+
+                }
+            };
         mDetector = new ScaleGestureDetector(context, mScaleListener);
+        mRotationDetector = new RotationGestureDetector(context, mRotateListener);
     }
 
     @Override
@@ -60,9 +83,14 @@ public class FroyoGestureDetector extends EclairGestureDetector {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        mDetector.onTouchEvent(ev);
-        return super.onTouchEvent(ev);
+    public boolean isRotating() {
+        return mRotationDetector.isInProgress();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        mDetector.onTouchEvent(ev);
+        mRotationDetector.onTouchEvent(ev);
+        return super.onTouchEvent(ev);
+    }
 }

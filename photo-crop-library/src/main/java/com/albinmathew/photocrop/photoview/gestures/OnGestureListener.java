@@ -23,4 +23,6 @@ public interface OnGestureListener {
 
     void onScale(float scaleFactor, float focusX, float focusY);
 
+    void onRotate(float rotationDelta, float focusX, float focusY);
+
 }
